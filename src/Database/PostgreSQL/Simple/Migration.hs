@@ -175,6 +175,7 @@ executeMigration con opts name contents = doStepTransaction opts con $ do
     ScriptNotExecuted -> do
       when (verbose opts) $ optLogWriter opts $ Right ("Executing:\t" <> fromString name)
       void $ execute_ con (Query contents)
+      when (verbose opts) $ optLogWriter opts $ Right ("Adding '" <> fromString name <> "' to schema_migrations with checksum '"<> fromString (show checksum) <>"'")
       void $ execute con q (name, checksum)
       when (verbose opts) $ optLogWriter opts $ Right ("Executed:\t" <> fromString name)
       pure MigrationSuccess

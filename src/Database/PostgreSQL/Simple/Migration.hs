@@ -173,9 +173,11 @@ executeMigration con opts name contents = doStepTransaction opts con $ do
       when (verbose opts) $ optLogWriter opts $ Right $ "Ok:\t" <> fromString name
       pure MigrationSuccess
     ScriptNotExecuted -> do
+      when (verbose opts) $ optLogWriter opts $ Right ("Executing:\t" <> fromString name)
       void $ execute_ con (Query contents)
+      when (verbose opts) $ optLogWriter opts $ Right ("Adding '" <> fromString name <> "' to schema_migrations with checksum '" <> fromString (show checksum) <> "'")
       void $ execute con q (name, checksum)
-      when (verbose opts) $ optLogWriter opts $ Right ("Execute:\t" <> fromString name)
+      when (verbose opts) $ optLogWriter opts $ Right ("Executed:\t" <> fromString name)
       pure MigrationSuccess
     ScriptModified eva -> do
       when (verbose opts) $ optLogWriter opts $ Left ("Fail:\t" <> fromString name <> "\n" <> scriptModifiedErrorMessage eva)

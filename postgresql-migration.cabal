@@ -61,7 +61,7 @@ library
                         , filepath                    >= 1.4.1.0
                         , postgresql-simple           >= 0.4
                         , time                        >= 1.4
-                        , text                        >= 1.2
+                        , text                        >= 1.2 || ^>=2.0
 
 executable migrate
   import:                 common-options
@@ -83,7 +83,7 @@ executable migrate
                         , directory                   >= 1.2
                         , postgresql-simple           >= 0.4
                         , time                        >= 1.4
-                        , text                        >= 1.2
+                        , text                        >= 1.2 || ^>=2.0
 
 test-suite tests
   import:                 common-options

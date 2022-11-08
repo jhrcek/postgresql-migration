@@ -61,6 +61,7 @@ jobs:
           mkdir -p "$HOME/.ghcup/bin"
           curl -sL https://downloads.haskell.org/ghcup/0.1.16.2/x86_64-linux-ghcup-0.1.16.2 > "$HOME/.ghcup/bin/ghcup"
           chmod a+x "$HOME/.ghcup/bin/ghcup"
+          "$HOME/.ghcup/bin/ghcup" upgrade
           "$HOME/.ghcup/bin/ghcup" install ghc "$HCVER"
           "$HOME/.ghcup/bin/ghcup" install cabal 3.6.2.0
         env:

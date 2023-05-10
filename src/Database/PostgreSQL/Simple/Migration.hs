@@ -46,7 +46,7 @@ import qualified Data.ByteString as BS (ByteString, readFile)
 import qualified Data.ByteString.Char8 as BS8 (unpack)
 import qualified Data.ByteString.Base64 as B64 (encode)
 import           Data.Functor ((<&>))
-import           Data.List (isPrefixOf, sort)
+import           Data.List (sort)
 import           Data.Time (LocalTime)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T (putStrLn, hPutStrLn)
@@ -64,11 +64,11 @@ import           Database.PostgreSQL.Simple.ToField (ToField (..))
 import           Database.PostgreSQL.Simple.ToRow (ToRow (..))
 import           Database.PostgreSQL.Simple.Types (Query (..))
 import           Database.PostgreSQL.Simple.Util (existsTable)
-import           System.Directory (getDirectoryContents)
+import           System.Directory (listDirectory)
 import           System.FilePath ((</>))
 import           System.IO (stderr)
 
--- | Executes migrations inside the provided 'MigrationContext'.
+-- | Executes migrations using the provided 'MigrationOptions'.
 --
 -- Returns 'MigrationSuccess' if the provided 'MigrationCommand' executes
 -- without error. If an error occurs, execution is stopped and
@@ -156,7 +156,7 @@ executeDirectoryMigration con opts dir =
 -- | Lists all files in the given 'FilePath' 'dir' in alphabetical order.
 scriptsInDirectory :: FilePath -> IO [String]
 scriptsInDirectory dir =
-  getDirectoryContents dir <&> (sort . filter (\x -> not $ "." `isPrefixOf` x))
+  sort <$> listDirectory dir
 
 
 -- | Executes a generic SQL migration for the provided script 'name' with content 'contents'.
@@ -215,7 +215,7 @@ executeValidation
 executeValidation con opts cmd = doStepTransaction opts con $
   case cmd of
     MigrationInitialization ->
-      existsTable con (BS8.unpack $ optTableName opts) >>= \r -> pure $ if r
+      existsTable con (BS8.unpack $ optTableName opts) <&> \r -> if r
         then MigrationSuccess
         else MigrationError ("No such table: " <> BS8.unpack (optTableName opts))
     MigrationDirectory path ->
@@ -340,11 +340,11 @@ data Verbosity
   | Quiet
   deriving (Show, Eq)
 
--- | Determines how transactions are handled
--- Its is recommened to use transaction when running migrations
--- Certain actions require a transaction per script, if you are doing this use TransactionPerStep
--- If you want a single transaction for all migrations use TransactionPerRun
--- If you do not want a transaction, or are using an existing transaction then use NoNewTransaction
+-- | Determines how transactions are handled.
+-- It is recommened to use transaction when running migrations.
+-- Certain actions require a transaction per script, if you are doing this use TransactionPerStep.
+-- If you want a single transaction for all migrations use TransactionPerRun.
+-- If you do not want a transaction, or are using an existing transaction then use NoNewTransaction.
 data TransactionControl
   = NoNewTransaction -- ^ No new transaction will be started. Up to the caller to decide if the run is in a transaction or not
   | TransactionPerRun -- ^ Call 'withTransaction' once for the entire 'MigrationCommand'

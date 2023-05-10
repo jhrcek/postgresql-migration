@@ -28,7 +28,7 @@ and documented both in your production systems and in your project files.
 This library executes SQL/Haskell migration scripts and keeps track of their
 meta information.
 
-Scripts are be executed exactly once and any changes to scripts will cause
+Scripts are executed exactly once and any changes to scripts will cause
 a run-time error notifying you of a corrupted database.
 
 The meta information consists of:
@@ -140,7 +140,7 @@ transaction is rolled back.
 
 ### Options
 
-The `runMigration` and `runMigration` functions take an options record that let you
+The `runMigration` and `runMigrations` functions take an options record that let you
 set the following
 
  - `optVerbose`: Is verbose logging enabled or not
@@ -165,7 +165,7 @@ Tests are executed through cabal as follows:
 
 ```bash
 cabal configure --enable-tests 
-PGHOST=localhost PGDATABASE=test make-cabal test
+PGHOST=localhost PGDATABASE=test make cabal-test
 ```
 
 To build with stack use the following command
@@ -181,7 +181,7 @@ PGHOST=localhost PGDATABASE=test make stack-test
 ```
 
 NB note that the **psql** test argument must be set for the test suite to run. This is so that other CI environments like
-stackage or nix that wont have a running test psql instance will not fail on these tests
+stackage or nix that won't have a running test psql instance will not fail on these tests
 
 
 # Changes from the original postgresql-simple-migration (version 0.1)
@@ -238,5 +238,3 @@ or if you want to change the default options
 ```
 
 That is all that needs to change. Your migrations scripts etc all remain as is.
-
-

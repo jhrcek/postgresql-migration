@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+* Switch from deprecated cryptohash dependency to cryptohash-md5 
+
 ## 0.2.1.0
  * Forked & renamed to postgresql-migration
  * Support for changing the schema_migration table name 

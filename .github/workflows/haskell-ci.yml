@@ -52,6 +52,11 @@ jobs:
             compilerVersion: 8.4.4
             setup-method: ghcup
             allow-failure: false
+          - compiler: ghc-9.6.1
+            compilerKind: ghc
+            compilerVersion: 9.6.1
+            setup-method: ghcup
+            allow-failure: false
       fail-fast: false
     steps:
       - name: apt

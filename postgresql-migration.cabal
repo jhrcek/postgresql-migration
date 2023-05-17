@@ -12,12 +12,15 @@ copyright:                  2014-2021, Andreas Meingast
 category:                   Database
 build-type:                 Simple
 description:                A PostgreSQL-simple schema migration utility
-tested-with:                GHC==9.2.4, GHC==9.0.1, GHC==8.8.4, GHC==8.6.5, GHC==8.4.4, GHC==9.6.1
-
-extra-source-files:         License
-                            Readme.markdown
+tested-with:                GHC==9.6.1
+                            GHC==9.4.4
+                            GHC==9.2.7
+                            GHC==9.0.2
+                            GHC==8.8.4
+                            GHC==8.6.5
+extra-doc-files:            Readme.markdown
                             Changelog.markdown
-
+extra-source-files:         License
                             share/test/*.sql
                             share/test/scripts/*.sql
 
@@ -30,22 +33,25 @@ common common-options
     base >=4.9 && <5
   default-language:
     Haskell2010
+  ghc-options: -Wall
+               -Wincomplete-uni-patterns
+               -Wincomplete-record-updates
+               -Wcompat
+               -Wredundant-constraints
+               -Wnoncanonical-monad-instances
+               -Widentities
+               -Wpartial-fields
+               -fhide-source-paths
+               -freverse-errors
+  
+  if impl(ghc >= 8.8.1)
+    ghc-options: -fwrite-ide-info -hiedir=.hie
 
-common common-ghc-options-ide
-  ghc-options: -fwrite-ide-info -hiedir=.hie
-
-common common-ghc-options
-  ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Wredundant-constraints -Wnoncanonical-monad-instances -Widentities -Wpartial-fields -fhide-source-paths -freverse-errors
   if impl(ghc >= 8.10)
-      ghc-options: -Wunused-packages
+    ghc-options: -Wunused-packages
 
 library
   import:                 common-options
-  import:                 common-ghc-options
-
-  if impl(ghc >= 8.8.1)
-    import:                common-ghc-options-ide
-
   exposed-modules:        Database.PostgreSQL.Simple.Migration
                         , Database.PostgreSQL.Simple.Migration.V1Compat
                         , Database.PostgreSQL.Simple.Util
@@ -61,13 +67,8 @@ library
                         , time                        >= 1.4      && < 1.13
                         , text                        >= 1.2      && < 2.1
 
-
 executable migrate
   import:                 common-options
-  import:                 common-ghc-options
-  if impl(ghc >= 8.8.1)
-    import:                common-ghc-options-ide
-
   ghc-options:            -threaded
   main-is:                Main.hs
   other-modules:          Paths_postgresql_migration
@@ -80,16 +81,12 @@ executable migrate
 
 test-suite tests
   import:                 common-options
-  import:                 common-ghc-options
-  if impl(ghc >= 8.8.1)
-    import:               common-ghc-options-ide
-
   main-is:                Main.hs
   hs-source-dirs:         test
   other-modules:          Database.PostgreSQL.Simple.MigrationTest
-                       ,  Database.PostgreSQL.Simple.MigrationTestV1Compat
-                       ,  Database.PostgreSQL.Simple.TransactionPerRunTest
-                       ,  Database.PostgreSQL.Simple.TransactionPerStepTest
+                        , Database.PostgreSQL.Simple.MigrationTestV1Compat
+                        , Database.PostgreSQL.Simple.TransactionPerRunTest
+                        , Database.PostgreSQL.Simple.TransactionPerStepTest
   type:                   exitcode-stdio-1.0
   build-depends:          postgresql-migration
                         , postgresql-simple           >= 0.4      && < 0.7

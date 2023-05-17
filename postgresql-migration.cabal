@@ -20,8 +20,7 @@ tested-with:                GHC==9.6.1
                             GHC==8.6.5
 extra-doc-files:            Readme.markdown
                             Changelog.markdown
-extra-source-files:         License
-                            share/test/*.sql
+extra-source-files:         share/test/*.sql
                             share/test/scripts/*.sql
 
 source-repository head

@@ -36,7 +36,7 @@ common common-ghc-options-ide
   ghc-options: -fwrite-ide-info -hiedir=.hie
 
 common common-ghc-options
-  ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Wredundant-constraints -Wnoncanonical-monad-instances -Widentities -fhide-source-paths -Wpartial-fields -fhide-source-paths -freverse-errors
+  ghc-options: -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wcompat -Wredundant-constraints -Wnoncanonical-monad-instances -Widentities -Wpartial-fields -fhide-source-paths -freverse-errors
 
 
 library

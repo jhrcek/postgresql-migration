@@ -217,7 +217,7 @@ executeValidation
 executeValidation con opts cmd = doStepTransaction opts con $
   case cmd of
     MigrationInitialization ->
-      existsTable con (migrationsTableName opts) <&> \r -> if r
+      existsTable con (BS8.unpack $ optTableName opts) <&> \r -> if r
         then MigrationSuccess
         else MigrationError ("No such table: " <> BS8.unpack (optTableName opts))
     MigrationDirectory path ->

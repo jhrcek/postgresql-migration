@@ -17,6 +17,7 @@ module Database.PostgreSQL.Simple.Util
     ) where
 
 import           Control.Exception ( finally )
+import           Database.PostgreSQL.Simple.Types (Identifier)
 import           Database.PostgreSQL.Simple ( Connection
                                             , Only (..)
                                             , begin
@@ -26,7 +27,7 @@ import           Database.PostgreSQL.Simple ( Connection
 import           GHC.Int (Int64)
 
 -- | Checks if the table with the given name exists in the database.
-existsTable :: Connection -> String -> IO Bool
+existsTable :: Connection -> Identifier -> IO Bool
 existsTable con table =
   checkRowCount <$> (query con q (Only table) :: IO [[Int64]])
   where
